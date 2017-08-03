@@ -73,7 +73,11 @@ public class PlayerController : MonoBehaviour {
 				drop();
 			}
 		}
-		
+		if (Physics.Raycast(transform.position, Physics.gravity.normalized, transform.lossyScale.y)) {
+			onGround = true;
+		} else {
+			onGround = false;
+		}
 			
 	}
 	void OnCollisionEnter(Collision collision) {
@@ -82,19 +86,10 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-
-	void OnCollisionStay(Collision collision) {	
-		var wall = collision.gameObject.transform;
-		if ((wall.position.y + wall.lossyScale.y/2 <= transform.position.y 
-				&& Physics.gravity.normalized.y == -1) ||
-			(wall.position.y - wall.lossyScale.y/2 >= transform.position.y 
-				&& Physics.gravity.normalized.y == 1)) {
-			onGround = true;
-		}
-	}
-
 	void OnCollisionExit(Collision collision) {
-		onGround = false;
+		if (!holding) {
+			item = null;
+		}
 	}
 
 	void pickUp() {
