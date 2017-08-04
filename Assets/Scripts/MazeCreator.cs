@@ -30,7 +30,6 @@ public class MazeCreator : MonoBehaviour {
 		{
 			for (int y = 0; y < yMax; y++)
 			{
-				Debug.Log("x, y:"+x+","+y);
 				if (verticalMap[x, y] == 1) {
 					var clone = Instantiate(Walls, new Vector3(0,0,0), Quaternion.identity, gameObject.transform);
 					clone.transform.localPosition = new Vector3(x-xMax/2, 0, y-yMax/2);

@@ -11,8 +11,13 @@ public class SwitchBehavior : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		gameObject.GetComponent<Renderer>().enabled = present;
-		gameObject.GetComponent<Collider>().enabled = present;
+		if (gameObject.GetComponent<Renderer>() != null) {
+			gameObject.GetComponent<Renderer>().enabled = present;
+		}
+		if (gameObject.GetComponent<Collider>() != null) {
+			gameObject.GetComponent<Collider>().enabled = present;
+		}
+		
 		previous = plate.GetComponent<PlateBehavior>().isActivated();
 	}
 	
@@ -25,8 +30,12 @@ public class SwitchBehavior : MonoBehaviour {
 	}	
 
 	void switchState() {
-		gameObject.GetComponent<Renderer>().enabled = !gameObject.GetComponent<Renderer>().enabled;
-		gameObject.GetComponent<Collider>().enabled = !gameObject.GetComponent<Collider>().enabled;
+		if (gameObject.GetComponent<Renderer>() != null) {
+			gameObject.GetComponent<Renderer>().enabled = !gameObject.GetComponent<Renderer>().enabled;
+		}
+		if (gameObject.GetComponent<Collider>() != null) {
+			gameObject.GetComponent<Collider>().enabled = !gameObject.GetComponent<Collider>().enabled;
+		}
 	}
 	
 

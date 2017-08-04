@@ -33,7 +33,6 @@ public class GravityPanelController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {	
-        Debug.Log(Physics.gravity);
 		if (activated && color != activatedColor) {
             this.GetComponent<Renderer>().material.color = activatedColor;
             color = activatedColor;

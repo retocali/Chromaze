@@ -50,19 +50,19 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// Camera Fix for Jittery collisions
-		float y = transform.position.y;
+		float y = transform.position.y+1;
 		float x = transform.position.x;
 		float z = transform.position.z;
 
 		if ( Math.Abs(mainCamera.transform.position.x - x) > xCameraThreshold || 
-			 Math.Abs(mainCamera.transform.position.y - y) > yCameraThreshold || 
+			 Math.Abs(mainCamera.transform.position.y+1 - y) > yCameraThreshold || 
 			 Math.Abs(mainCamera.transform.position.z - z) > zCameraThreshold
 		   ) {
 			mainCamera.transform.position = new Vector3(x, y, z);	
 		}
 
 		if (holding) {
-			item.GetComponent<Rigidbody>().position = new Vector3(x, y, z) + mainCamera.transform.TransformVector(transform.forward * 2);
+			item.GetComponent<Rigidbody>().position = new Vector3(x, y, z) + mainCamera.transform.TransformVector(transform.forward*1.5F);
 		}
 
 		// Item holding
@@ -98,8 +98,8 @@ public class PlayerController : MonoBehaviour {
 			item.GetComponent<Collider>().isTrigger = true;
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-			item.GetComponent<Rigidbody>().position = transform.position + mainCamera.transform.TransformVector(transform.forward * 2);
-			
+			item.transform.localScale -= new Vector3(0.5F, 0.5F, 0.5F);
+
 		}
 	
 	}
@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
 			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
+			item.transform.localScale += new Vector3(0.5F, 0.5F, 0.5F);
 			item = null;
 			holding = false;
 		}
@@ -131,9 +132,9 @@ public class PlayerController : MonoBehaviour {
 		rb.position -= new Vector3(movement.x, 0, movement.z);
 	}
 		
-
+	void makeBubble(){
+		
+	}
 
 }
-
-
-
+	

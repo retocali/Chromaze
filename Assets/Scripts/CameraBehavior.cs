@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//[AddComponentMenu("Camera-Control/Smooth Mouse Look")]
+[AddComponentMenu("Camera-Control/Smooth Mouse Look")]
 public class CameraBehavior : MonoBehaviour {
 
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -29,15 +29,15 @@ public class CameraBehavior : MonoBehaviour {
 
 	Quaternion originalRotation;
 
-	void LateUpdate ()
+	void FixedUpdate ()
 	{
 		if (axes == RotationAxes.MouseXAndY)
 		{			
 			rotAverageY = 0f;
 			rotAverageX = 0f;
 
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+			rotationY += Input.GetAxis("Mouse Y") * sensitivityY/5f;
+			rotationX += Input.GetAxis("Mouse X") * sensitivityX/5f;
 
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
@@ -115,14 +115,14 @@ public class CameraBehavior : MonoBehaviour {
 		if (Input.GetKey (KeyCode.P)) {
 			if (sensitivityX < 25F) {
 				sensitivityX += 0.15F;
-				sensitivityY += 0.09F;
+				sensitivityY += 0.15F;
 			}
 			Debug.Log ("increasing Sensitivity");
 		}
 		if (Input.GetKey (KeyCode.O)) {
-			if (sensitivityX >=3F) {
+			if (sensitivityX >=0.5F) {
 				sensitivityX -= 0.15F;
-				sensitivityY -= 0.09F;
+				sensitivityY -= 0.15F;
 			}
 			Debug.Log ("decreasing Sensitivity");
 			Debug.Log (sensitivityX);
@@ -155,12 +155,16 @@ public class CameraBehavior : MonoBehaviour {
 		angle = angle % 360;
 		if ((angle >= -360F) && (angle <= 360F)) {
 			if (angle < -360F) {
-				angle += 360F;
+				angle = -360F;
 			}
 			if (angle > 360F) {
-				angle -= 360F;
+				angle = 360F;
 			}			
 		}
 		return Mathf.Clamp (angle, min, max);
+	}
+
+	public void rotate(Vector3 angle) {
+		originalRotation.eulerAngles += (angle);
 	}
 }

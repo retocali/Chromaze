@@ -30,11 +30,11 @@ public class PortalController : MonoBehaviour {
 		}
 		
 		exitView = exit.GetComponent<PortalController>().cameraView;
-		if (exitView != null) {
-			exitView.targetTexture = view;
+		if (cameraView != null) {
+			cameraView.targetTexture = view;
 			view.Create();
 			Renderer rend = GetComponent<Renderer>();
-			rend.material.mainTexture = view;
+			rend.material.mainTexture = exit.GetComponent<PortalController>().texture();
 		}
 		
 	}
@@ -45,8 +45,10 @@ public class PortalController : MonoBehaviour {
 			return;
 		}
 		if ((player.transform.position - cameraView.transform.position).magnitude < RenderDistance) {
-			exitView.transform.rotation = Quaternion.LookRotation(cameraView.transform.position - player.transform.position);
+			exitView.transform.rotation = Quaternion.LookRotation(- cameraView.transform.position + player.transform.position);
+			exitView.transform.Rotate(transform.rotation.eulerAngles-exit.transform.rotation.eulerAngles);
 		}
+		
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -63,6 +65,11 @@ public class PortalController : MonoBehaviour {
 			float z = exit.transform.position.z;
 
 			other.gameObject.transform.position = new Vector3(x + deltaX, y + deltaY, z + deltaZ);
+			
+			
+			Camera.main.GetComponent<CameraBehavior>().rotate((-transform.rotation.eulerAngles+exit.transform.rotation.eulerAngles) + new Vector3(0,180,0));
+			
+			
 			exit.GetComponent<PortalController>().turnedOn = false;
 		}
 	}
@@ -70,5 +77,8 @@ public class PortalController : MonoBehaviour {
 	void OnTriggerExit(Collider other)
 	{
 		turnedOn = true;	
+	}
+	RenderTexture texture() {
+		return view;
 	}
 }
