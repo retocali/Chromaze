@@ -11,7 +11,9 @@ public class PlayerController : MonoBehaviour {
 	public float xCameraThreshold;
 	public float yCameraThreshold;
 	public float zCameraThreshold;
-
+	public GameObject bubblePrefab;
+	public float scaleFactor = 0.3f;
+	public int boxLayer = 1 << 9;
 
 	public Camera mainCamera;
 	
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 	private bool onGround;
 	private bool holding;
 	private GameObject item;
+	private GameObject currentBubble;
 
 	// Use this for initialization
 	void Start () {
@@ -50,12 +53,12 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// Camera Fix for Jittery collisions
-		float y = transform.position.y+1;
+		float y = transform.position.y;
 		float x = transform.position.x;
 		float z = transform.position.z;
 
 		if ( Math.Abs(mainCamera.transform.position.x - x) > xCameraThreshold || 
-			 Math.Abs(mainCamera.transform.position.y+1 - y) > yCameraThreshold || 
+			 Math.Abs(mainCamera.transform.position.y - y) > yCameraThreshold || 
 			 Math.Abs(mainCamera.transform.position.z - z) > zCameraThreshold
 		   ) {
 			mainCamera.transform.position = new Vector3(x, y, z);	
@@ -63,11 +66,12 @@ public class PlayerController : MonoBehaviour {
 
 		if (holding) {
 			item.GetComponent<Rigidbody>().position = new Vector3(x, y, z) + mainCamera.transform.TransformVector(transform.forward*1.5F);
+			currentBubble.transform.position = item.GetComponent<Rigidbody>().position;
 		}
 
 		// Item holding
 		if (Input.GetKeyDown(KeyCode.E)) {
-			if (!holding && item != null) {
+			if (!holding) {
 				pickUp();
 			} else {
 				drop();
@@ -80,26 +84,37 @@ public class PlayerController : MonoBehaviour {
 		}
 			
 	}
-	void OnCollisionEnter(Collision collision) {
-		if (!holding) {
-			item = collision.gameObject;
-		}
-	}
 
-	void OnCollisionExit(Collision collision) {
-		if (!holding) {
-			item = null;
-		}
-	}
+//	void OnCollisionEnter(Collision collision) {
+//		if (!holding) {
+//			item = collision.gameObject;
+//		}
+//	}
+//
+//	void OnCollisionExit(Collision collision) {
+//		if (!holding) {
+//			item = null;
+//		}
+//	}
+	RaycastHit hit;
 
 	void pickUp() {
-		if (item.tag == "Box") {
+		Debug.Log("Picking up");
+		if (Physics.BoxCast(transform.position, 2*(Vector3.one-Vector3.forward), 
+				mainCamera.transform.TransformVector(Vector3.forward), out hit, 
+				mainCamera.transform.rotation, 1, boxLayer)) {
+			Debug.Log("Here:" + hit.collider.gameObject.tag);
+			if (!(hit.collider.gameObject.tag == "Box")) {
+				return;	
+			}
+
 			holding = true;
+			item = hit.collider.gameObject;
 			item.GetComponent<Collider>().isTrigger = true;
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-			item.transform.localScale -= new Vector3(0.5F, 0.5F, 0.5F);
-
+			item.transform.localScale = Vector3.one * scaleFactor;
+			makeBubble();
 		}
 	
 	}
@@ -108,9 +123,12 @@ public class PlayerController : MonoBehaviour {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
 			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
-			item.transform.localScale += new Vector3(0.5F, 0.5F, 0.5F);
+			item.transform.localScale = Vector3.one;
+			Destroy(currentBubble);
+
 			item = null;
 			holding = false;
+			
 		}
 		
 	}
@@ -133,7 +151,7 @@ public class PlayerController : MonoBehaviour {
 	}
 		
 	void makeBubble(){
-		
+		currentBubble = Instantiate(bubblePrefab);
 	}
 
 }

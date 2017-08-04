@@ -14,10 +14,13 @@ public class SwitchBehavior : MonoBehaviour {
 		if (gameObject.GetComponent<Renderer>() != null) {
 			gameObject.GetComponent<Renderer>().enabled = present;
 		}
+
 		if (gameObject.GetComponent<Collider>() != null) {
 			gameObject.GetComponent<Collider>().enabled = present;
 		}
-		
+		if (plate == null) {
+			Debug.Log(name);
+		}
 		previous = plate.GetComponent<PlateBehavior>().isActivated();
 	}
 	
@@ -33,6 +36,7 @@ public class SwitchBehavior : MonoBehaviour {
 		if (gameObject.GetComponent<Renderer>() != null) {
 			gameObject.GetComponent<Renderer>().enabled = !gameObject.GetComponent<Renderer>().enabled;
 		}
+
 		if (gameObject.GetComponent<Collider>() != null) {
 			gameObject.GetComponent<Collider>().enabled = !gameObject.GetComponent<Collider>().enabled;
 		}

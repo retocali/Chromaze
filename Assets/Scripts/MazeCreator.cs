@@ -16,6 +16,7 @@ public class MazeCreator : MonoBehaviour {
 			{0,1,1,1,1,0},
 			{0,0,0,1,1,1},
 		};
+
 		int[,] horizontalMap = new int[,] {
 			{0,0,0,0,0,0},
 			{0,0,0,1,0,0},
@@ -24,8 +25,10 @@ public class MazeCreator : MonoBehaviour {
 			{0,0,0,0,0,0},
 			{0,1,0,1,0,0},
 		};
+
 		float xMax = verticalMap.GetLength(0);
 		float yMax = verticalMap.GetLength(1);
+		
 		for (int x = 0; x < xMax; x++)
 		{
 			for (int y = 0; y < yMax; y++)

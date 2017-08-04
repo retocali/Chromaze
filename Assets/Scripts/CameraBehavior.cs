@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 [AddComponentMenu("Camera-Control/Smooth Mouse Look")]
-public class CameraBehavior : MonoBehaviour {
+public class CameraBehavior : MonoBehaviour 
+{
 
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 	public RotationAxes axes = RotationAxes.MouseXAndY;
@@ -29,8 +30,20 @@ public class CameraBehavior : MonoBehaviour {
 
 	Quaternion originalRotation;
 
+	private bool rotating = false;
+	private Vector3 finalAngle = Vector3.zero;
+	private int numberOfTimes = 1;
+
 	void FixedUpdate ()
 	{
+		if (rotating) 
+		{
+			rotate(finalAngle/numberOfTimes);
+			finalAngle -= finalAngle/numberOfTimes;
+			if (finalAngle == Vector3.zero) {
+				rotating = false;
+			}
+		}
 		if (axes == RotationAxes.MouseXAndY)
 		{			
 			rotAverageY = 0f;
@@ -42,10 +55,12 @@ public class CameraBehavior : MonoBehaviour {
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
 
-			if (rotArrayY.Count >= frameCounter) {
+			if (rotArrayY.Count >= frameCounter) 
+			{
 				rotArrayY.RemoveAt(0);
 			}
-			if (rotArrayX.Count >= frameCounter) {
+			if (rotArrayX.Count >= frameCounter) 
+			{
 				rotArrayX.RemoveAt(0);
 			}
 
@@ -164,7 +179,19 @@ public class CameraBehavior : MonoBehaviour {
 		return Mathf.Clamp (angle, min, max);
 	}
 
-	public void rotate(Vector3 angle) {
+	public void rotate(Vector3 angle) 
+	{
 		originalRotation.eulerAngles += (angle);
+	}
+	public void slowRotate(Vector3 angle, int frames)
+	{
+		if (!rotating) {
+			rotating = true;
+			finalAngle = angle;
+			numberOfTimes = frames;
+		} else {
+			finalAngle += angle;
+			numberOfTimes = frames;
+		}
 	}
 }

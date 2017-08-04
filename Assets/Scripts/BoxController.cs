@@ -11,16 +11,20 @@ public class BoxController : MonoBehaviour {
 	public ColorManager.ColorName colorName;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		Color color = ColorManager.findColor(colorName);
 		this.GetComponent<Renderer>().material.color = color;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
+	
 	}
 
-	public bool isDroppable() {
+	public bool isDroppable() 
+	{
 		return droppable;
 	}
 
