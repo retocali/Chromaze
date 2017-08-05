@@ -5,9 +5,12 @@ using UnityEngine;
 public class BGMBehavior : MonoBehaviour {
 
 	public int startingPitch;
+	public float maxPitch;
+	public float minPitch;
 	public int timeToDecrease;
 
 	private int timeConstant = 100;
+	private float delta = -1;
 	AudioSource audioSource;
 
 	void Start()
@@ -16,22 +19,20 @@ public class BGMBehavior : MonoBehaviour {
 		audioSource.pitch = startingPitch;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
-		if (audioSource.pitch <= 3 && audioSource.pitch >= 1.5) {
-			audioSource.pitch -= Time.deltaTime / timeConstant * startingPitch / timeToDecrease;
+		if (audioSource.pitch <= maxPitch && audioSource.pitch >= minPitch) {
+			audioSource.pitch += delta*Time.deltaTime / timeConstant * startingPitch / timeToDecrease;
 
-			if (audioSource.volume < 1 && audioSource.pitch > 2) {
+			if (audioSource.volume < 1 && audioSource.pitch > maxPitch) {
 				audioSource.volume += 0.008F;
 			}
-			if (audioSource.pitch < 1.55F) {
+			if (audioSource.pitch < minPitch) {
 				audioSource.volume -= 0.005F;
 			}
-		}
-		
-
-		if (audioSource.pitch <= 1.5) {
-			audioSource.pitch = 3;
+		} else {
+			delta *= -1;
+			audioSource.pitch += delta*Time.deltaTime / timeConstant * startingPitch / timeToDecrease;
 		}
 	}
 

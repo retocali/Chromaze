@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// Item holding
-		if (Input.GetKeyDown(KeyCode.E)) {
+		if (Input.GetKeyUp(KeyCode.E)) {
 			if (!holding) {
 				pickUp();
 			} else {
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour {
 			item.GetComponent<Collider>().isTrigger = true;
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-			item.transform.localScale = Vector3.one * scaleFactor;
+			item.transform.localScale *= scaleFactor;
 			makeBubble();
 		}
 	
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
 			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
-			item.transform.localScale = Vector3.one;
+			item.transform.localScale /= scaleFactor;
 			Destroy(currentBubble);
 
 			item = null;
