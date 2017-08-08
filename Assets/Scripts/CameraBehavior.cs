@@ -11,8 +11,8 @@ public class CameraBehavior : MonoBehaviour
 	public float sensitivityX = 15F;
 	public float sensitivityY = 15F;
 
-	public float minimumX = -360F;
-	public float maximumX = 360F;
+	public float minimumX = -359F;
+	public float maximumX = 359F;
 
 	public float minimumY = -60F;
 	public float maximumY = 60F;
@@ -49,14 +49,18 @@ public class CameraBehavior : MonoBehaviour
 			rotAverageY = 0f;
 			rotAverageX = 0f;
 
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY/5f;
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX/5f;
+			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
 
+			rotationX = ClampAngle(rotationX, minimumX, maximumX);
+			rotationY = ClampAngle(rotationY, minimumY, maximumY);
+			
+			Debug.Log(rotationY);
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
 
 			if (rotArrayY.Count >= frameCounter) 
-			{
+			{	
 				rotArrayY.RemoveAt(0);
 			}
 			if (rotArrayX.Count >= frameCounter) 
@@ -155,7 +159,6 @@ public class CameraBehavior : MonoBehaviour
 			}
 			Debug.Log ("NAY SOUND");
 		}
-		Input.ResetInputAxes();
 	}
 
 	void Start ()
