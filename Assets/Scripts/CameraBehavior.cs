@@ -155,6 +155,7 @@ public class CameraBehavior : MonoBehaviour
 			}
 			Debug.Log ("NAY SOUND");
 		}
+		Input.ResetInputAxes();
 	}
 
 	void Start ()
