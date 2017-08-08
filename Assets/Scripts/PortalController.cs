@@ -7,7 +7,10 @@ public class PortalController : MonoBehaviour
 
 	public float RenderDistance;
 	public GameObject exit;
-	
+
+	public AudioClip portal;
+	public AudioSource audioPortal;
+
 	private GameObject player;
 	
 	private Camera cameraView;
@@ -32,6 +35,7 @@ public class PortalController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		audioPortal = GameObject.Find ("SFX").GetComponent<AudioSource>();
 		turnedOn = true;
 		if (exit == null) 
 		{
@@ -59,8 +63,11 @@ public class PortalController : MonoBehaviour
 		}
 		if ((player.transform.position - cameraView.transform.position).magnitude < RenderDistance) 
 		{
+			exitView.enabled = true;
 			exitView.transform.rotation = Quaternion.LookRotation(- cameraView.transform.position + player.transform.position);
 			exitView.transform.Rotate(transform.rotation.eulerAngles-exit.transform.rotation.eulerAngles);
+		} else {
+			exitView.enabled = false;
 		}
 		
 	}
@@ -69,16 +76,20 @@ public class PortalController : MonoBehaviour
 	{
 		if (turnedOn) 
 		{
-			var deltaX = other.transform.position.x - transform.position.x;
 			var deltaY = other.transform.position.y - transform.position.y;
 			var deltaZ = other.transform.position.z - transform.position.z;
 
 			float x = exit.transform.position.x;
 			float y = exit.transform.position.y;
 			float z = exit.transform.position.z;
-
-			other.gameObject.transform.position = new Vector3(x + deltaX, y + deltaY, z + deltaZ);
-			
+		
+			Vector3 position = new Vector3(x, y + deltaY, z + deltaZ);
+			other.gameObject.transform.position = position;
+			audioPortal.PlayOneShot(portal, 2.2F);
+		
+			if (other.gameObject.tag == "Player") {
+				other.gameObject.GetComponent<PlayerController>().teleportItem(position);		
+			}
 			
 			Camera.main.GetComponent<CameraBehavior>().rotate((-transform.rotation.eulerAngles+exit.transform.rotation.eulerAngles) + new Vector3(0,180,0));
 			

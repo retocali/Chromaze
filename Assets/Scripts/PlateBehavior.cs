@@ -13,7 +13,8 @@ public class PlateBehavior : MonoBehaviour {
 	private Color activatedColor;
 	private Color deactivatedColor;
 	public ColorManager.ColorName colorName;
-
+	public AudioClip panel;
+	public AudioSource audioPanel;
 
 	// Use this for initialization
 	void Start () {
@@ -29,7 +30,7 @@ public class PlateBehavior : MonoBehaviour {
 				colorsToMix.Add(color, false);
 			}
 		}
-		
+		audioPanel = GameObject.Find ("SFX").GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +38,7 @@ public class PlateBehavior : MonoBehaviour {
 		if (activated && color != activatedColor) {
 			this.GetComponent<Renderer>().material.color = activatedColor;
 			color = activatedColor;
+			audioPanel.PlayOneShot(panel, 0.9F);
 		}
 		else if (!activated && color != deactivatedColor) {
 			this.GetComponent<Renderer>().material.color = deactivatedColor;
@@ -44,7 +46,7 @@ public class PlateBehavior : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision other)
+	void OnCollisionEnter(Collision other)	
 	{
 		onCollision(other);
 	}
@@ -55,11 +57,11 @@ public class PlateBehavior : MonoBehaviour {
 	}
 
 	private void onCollision(Collision other) {
-		if (other.gameObject.tag == "Wall") {
-			return;
-		}
+		
 		if (other.gameObject.tag == "Player") {
 			activated = true;
+		} else if (other.gameObject.tag != "Box") {
+			return;
 		} else if (other.gameObject.GetComponent<BoxController>().colorName == colorName) {
 			activated = true;
 		} else if (mixedColor) {

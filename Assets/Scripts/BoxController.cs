@@ -45,4 +45,20 @@ public class BoxController : MonoBehaviour {
 	{
 		droppable = true;
 	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		droppable = false;
+	}
+
+	void OnCollisionStay(Collision other)
+	{
+		droppable = false;
+	}
+
+
+	void OnCollisionExit(Collision other)
+	{
+		droppable = true;
+	}
 }

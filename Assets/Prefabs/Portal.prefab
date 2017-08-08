@@ -647,5 +647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd9beada1b3b84b55a8e07172ff3b4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RenderDistance: 100
+  RenderDistance: 20
   exit: {fileID: 0}
+  portal: {fileID: 8300000, guid: d6df8a77abbc54aae9df62a1c4896dc4, type: 3}
+  audioPortal: {fileID: 0}

@@ -5,6 +5,7 @@ using UnityEngine;
 public class MazeCreator : MonoBehaviour {
 
 	public GameObject Walls;
+	public GameObject Windows;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +13,7 @@ public class MazeCreator : MonoBehaviour {
 			{1,1,0,1,1,0},
 			{0,1,1,0,1,1},
 			{1,0,1,1,1,0},
-			{0,1,1,1,1,0},
+			{0,2,2,2,2,0},
 			{0,1,1,1,1,0},
 			{0,0,0,1,1,1},
 		};
@@ -20,7 +21,7 @@ public class MazeCreator : MonoBehaviour {
 		int[,] horizontalMap = new int[,] {
 			{0,0,0,0,0,0},
 			{0,0,0,1,0,0},
-			{0,0,0,1,0,0},
+			{0,0,0,2,0,0},
 			{0,1,0,0,0,1},
 			{0,0,0,0,0,0},
 			{0,1,0,1,0,0},
@@ -37,9 +38,17 @@ public class MazeCreator : MonoBehaviour {
 					var clone = Instantiate(Walls, new Vector3(0,0,0), Quaternion.identity, gameObject.transform);
 					clone.transform.localPosition = new Vector3(x-xMax/2, 0, y-yMax/2);
 				}
+				if (verticalMap[x, y] == 2) {
+					var clone = Instantiate(Windows, new Vector3(0,0,0), Quaternion.identity, gameObject.transform);
+					clone.transform.localPosition = new Vector3(x-xMax/2, 0, y-yMax/2);
+				}
 				if (horizontalMap[x, y] == 1) {
 					var clone = Instantiate(Walls, new Vector3(0,0,0), Quaternion.LookRotation(Vector3.right), gameObject.transform);
-					clone.transform.localPosition = new Vector3(x-xMax/2-0.5f, 0, y-yMax/2-0.5f);
+					clone.transform.localPosition = new Vector3(x-xMax/2-0.52f, 0, y-yMax/2-0.5f);
+				}
+				if (horizontalMap[x, y] == 2) {
+					var clone = Instantiate(Windows, new Vector3(0,0,0), Quaternion.LookRotation(Vector3.right), gameObject.transform);
+					clone.transform.localPosition = new Vector3(x-xMax/2-0.52f, 0, y-yMax/2-0.5f);
 				}
 				
 			}
