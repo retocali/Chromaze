@@ -74,6 +74,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33445510985428000
 MeshFilter:
@@ -120,4 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eadfa04ae2e44e64b13fa3ac09475dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorName: 0
+  minHeight: -100
+  colorName: 4
+  respawn: {fileID: 8300000, guid: cbb39537a31284574882af3b9924a734, type: 3}
+  audioRespawn: {fileID: 0}

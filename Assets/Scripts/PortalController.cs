@@ -69,13 +69,19 @@ public class PortalController : MonoBehaviour
 		} else {
 			exitView.enabled = false;
 		}
-		
+		Debug.Log(GetComponent<Collider>().isTrigger);
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
+		Debug.Log("Teleporting");
+		if (exit == null) {
+			return;
+		}
+		
 		if (turnedOn) 
 		{
+			
 			if (other.gameObject.tag != "Player") {
 				other.gameObject.GetComponent<Collider>().isTrigger = true;
 				return;

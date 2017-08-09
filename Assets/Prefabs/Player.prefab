@@ -39,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1293923734514054}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 59.6, y: 0, z: 8}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 0.25, y: 2, z: 0.25}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -122,12 +122,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   jumpHeight: 6
-  bubblePrefab: {fileID: 1378330538108386, guid: 66201ab6f91834012b7056797d594a6a,
-    type: 2}
+  minHeight: -100
   scaleFactor: 0.3
   boxLayer: 512
+  bubblePrefab: {fileID: 1378330538108386, guid: 66201ab6f91834012b7056797d594a6a,
+    type: 2}
   mainCamera: {fileID: 0}
   bubble: {fileID: 8300000, guid: 2d7a55eb088c34312a20a753e95e6518, type: 3}
-  audioBubble: {fileID: 0}
   jump: {fileID: 8300000, guid: 66017d4a06d474a1bb04f77eca7c4258, type: 3}
+  audioBubble: {fileID: 0}
   audioJump: {fileID: 0}

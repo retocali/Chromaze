@@ -9,7 +9,10 @@ public class BoxController : MonoBehaviour {
 	
 	public ColorManager.ColorName colorName;
 	public static Material baseMaterial;
-	
+
+	public AudioClip respawn;
+	public AudioSource audioRespawn;
+
 	private static Dictionary<ColorManager.ColorName, Material> materials = new Dictionary<ColorManager.ColorName, Material>();
 	
 	private bool droppable = true;
@@ -19,6 +22,7 @@ public class BoxController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		audioRespawn = GameObject.Find ("SFX").GetComponent<AudioSource>();
 		Color color = ColorManager.findColor(colorName);
 		
 		if (!materials.ContainsKey(colorName)) 
@@ -39,6 +43,7 @@ public class BoxController : MonoBehaviour {
 		if (transform.position.y <= minHeight) {
 			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			transform.position = initialPosition;
+			audioRespawn.PlayOneShot(respawn, 2.0F);
 		}
 	}
 
