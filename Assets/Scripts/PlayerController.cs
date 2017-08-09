@@ -8,29 +8,40 @@ public class PlayerController : MonoBehaviour {
 	// Player movement constants
 	public float speed;
 	public float jumpHeight;
-	public GameObject bubblePrefab;
+	public float minHeight = -100f;
+	
 	public float scaleFactor = 0.3f;
 	public int boxLayer = 1 << 9;
+	
+	public GameObject bubblePrefab;
 
 	public Camera mainCamera;
+	
 	public AudioClip bubble;
-	public AudioSource audioBubble;
 	public AudioClip jump;
+	
+	public AudioSource audioBubble;
 	public AudioSource audioJump;
 
 	
 	// Internal variables
 	private Rigidbody rb;
+	
 	private bool onGround;
 	private bool holding;
+	
 	private GameObject item;
 	private GameObject currentBubble;
+
+	private Vector3 initialPosition;
+	
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
 		onGround = false;
 		holding = false;
+		initialPosition = transform.position;
 	}
 
 	// Update is called once per frame
@@ -70,10 +81,15 @@ public class PlayerController : MonoBehaviour {
 		moveItem();
 
 		// Checking for Jumps
-		if (Physics.Raycast(transform.position, Physics.gravity.normalized, transform.lossyScale.y/2)) {
+		if (Physics.Raycast(transform.position, Physics.gravity.normalized, transform.lossyScale.y/2+0.001f)) {
 			onGround = true;
 		} else {
 			onGround = false;
+		}
+
+		if (transform.position.y <= minHeight) {
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			transform.position = initialPosition;
 		}
 			
 	}
@@ -90,35 +106,38 @@ public class PlayerController : MonoBehaviour {
 	RaycastHit hit;
 
 	void pickUp() {
-		Debug.Log("Picking up");
+		
 		if (Physics.BoxCast(transform.position, 2*(Vector3.one-Vector3.forward), 
 				mainCamera.transform.TransformVector(Vector3.forward), out hit, 
 				mainCamera.transform.rotation, 1, boxLayer)) {
 				audioBubble.PlayOneShot(bubble, 0.9F);
-			Debug.Log("Here:" + hit.collider.gameObject.tag);
+			
 			if (!(hit.collider.gameObject.tag == "Box")) {
 				return;	
 			}
 
 			holding = true;
 			item = hit.collider.gameObject;
-			// item.GetComponent<Collider>().isTrigger = true;
+
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+			
 			item.transform.localScale *= scaleFactor;
 			makeBubble();
+			Physics.IgnoreCollision(item.GetComponent<Collider>(), GetComponent<Collider>(), true);
 		}
 	
 	}
 	
 	void drop() {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
-			// item.GetComponent<Collider>().isTrigger = false;
+			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
 			item.transform.localScale /= scaleFactor;
 			Destroy(currentBubble);
 			audioBubble.PlayOneShot(bubble, 0.9F);
 
+			Physics.IgnoreCollision(item.GetComponent<Collider>(), GetComponent<Collider>(), false);
 			item = null;
 			holding = false;
 			
@@ -144,6 +163,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	public void teleportItem(Vector3 position) {
 		if (holding) {
+			item.GetComponent<Collider>().isTrigger = true;
 			item.GetComponent<Rigidbody>().position = position + mainCamera.transform.TransformVector(transform.forward*1.5f);
 			item.GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}

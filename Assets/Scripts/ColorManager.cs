@@ -28,7 +28,6 @@ namespace Colors
 		public static Color BLACK = Color.black;
 		public static Color WHITE = Color.white;
 
-
 		public static Color findColor(ColorName colorName) {
 			switch (colorName)
 			{

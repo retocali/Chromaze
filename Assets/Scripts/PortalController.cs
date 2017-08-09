@@ -76,6 +76,11 @@ public class PortalController : MonoBehaviour
 	{
 		if (turnedOn) 
 		{
+			if (other.gameObject.tag != "Player") {
+				other.gameObject.GetComponent<Collider>().isTrigger = true;
+				return;
+			}
+
 			var deltaY = other.transform.position.y - transform.position.y;
 			var deltaZ = other.transform.position.z - transform.position.z;
 
@@ -87,9 +92,9 @@ public class PortalController : MonoBehaviour
 			other.gameObject.transform.position = position;
 			audioPortal.PlayOneShot(portal, 2.2F);
 		
-			if (other.gameObject.tag == "Player") {
-				other.gameObject.GetComponent<PlayerController>().teleportItem(position);		
-			}
+			
+			other.gameObject.GetComponent<PlayerController>().teleportItem(position);		
+		
 			
 			Camera.main.GetComponent<CameraBehavior>().rotate((-transform.rotation.eulerAngles+exit.transform.rotation.eulerAngles) + new Vector3(0,180,0));
 			
@@ -99,6 +104,10 @@ public class PortalController : MonoBehaviour
 	
 	void OnTriggerExit(Collider other)
 	{
+		if (other.gameObject.tag != "Player") {
+			other.gameObject.GetComponent<Collider>().isTrigger = false;
+			return;
+		}
 		turnedOn = true;	
 	}
 	

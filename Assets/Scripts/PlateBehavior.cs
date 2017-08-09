@@ -6,24 +6,49 @@ using Colors;
 public class PlateBehavior : MonoBehaviour {
 
 	private bool activated;
-	private Color color;
 
 	private bool mixedColor;
 	private Dictionary<ColorManager.ColorName, bool> colorsToMix = new Dictionary<ColorManager.ColorName, bool>();
-	private Color activatedColor;
-	private Color deactivatedColor;
+
+	private static Dictionary<ColorManager.ColorName, Material> deactivatedMaterials = new Dictionary<ColorManager.ColorName, Material>();
+	private static Dictionary<ColorManager.ColorName, Material> activatedMaterials = new Dictionary<ColorManager.ColorName, Material>();
+	
+	private Material activatedColor;
+	private Material deactivatedColor;
+	private Color color;
+
+
 	public ColorManager.ColorName colorName;
 	public AudioClip panel;
 
 	// Use this for initialization
 	void Start () {
 		activated = false;
-		activatedColor = ColorManager.findColor(colorName);
-		deactivatedColor = new Color(0.5f*activatedColor.r, 0.5f*activatedColor.g, 0.5f*activatedColor.b, 0f);
-		this.GetComponent<Renderer>().material.color = deactivatedColor;
-		color = deactivatedColor;
+		
+		color = ColorManager.findColor(colorName);
+		if (!activatedMaterials.ContainsKey(colorName)) {
+			
+			deactivatedColor = new Material(this.GetComponent<Renderer>().material);
+			deactivatedColor.color = new Color(0.5f*color.r, 0.5f*color.g, 0.5f*color.b, 0f);
+			
+			activatedColor = new Material(this.GetComponent<Renderer>().material);
+			activatedColor.color = color;
+			
+			deactivatedMaterials[colorName] = deactivatedColor;
+			activatedMaterials[colorName] = activatedColor;
+			
+		} else {
+			deactivatedColor = deactivatedMaterials[colorName];
+			activatedColor = activatedMaterials[colorName];
+		}
+		this.GetComponent<Renderer>().material = deactivatedColor;
+		
+		
+		color = deactivatedColor.color;
 		mixedColor = ColorManager.isMixed(colorName);
-		if (mixedColor) {
+		
+		if (mixedColor) 
+		{
 			foreach (ColorManager.ColorName color in ColorManager.mixture(colorName))
 			{
 				colorsToMix.Add(color, false);
@@ -33,14 +58,15 @@ public class PlateBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {	
-		if (activated && color != activatedColor) {
-			this.GetComponent<Renderer>().material.color = activatedColor;
-			color = activatedColor;
+		if (activated && color != activatedColor.color) {
+			this.GetComponent<Renderer>().material = activatedColor;
+			color = activatedColor.color;
+			
 			AudioSource.PlayClipAtPoint(panel, transform.position, 0.9F);
 		}
-		else if (!activated && color != deactivatedColor) {
-			this.GetComponent<Renderer>().material.color = deactivatedColor;
-			color = deactivatedColor;
+		else if (!activated && color != deactivatedColor.color) {
+			this.GetComponent<Renderer>().material = deactivatedColor;
+			color = deactivatedColor.color;
 		}
 	}
 
@@ -56,16 +82,25 @@ public class PlateBehavior : MonoBehaviour {
 
 	private void onCollision(Collision other) {
 		
-		if (other.gameObject.tag == "Player") {
+		if (other.gameObject.tag == "Player")
+		{
 			activated = true;
-		} else if (other.gameObject.tag != "Box") {
+		}
+		else if (other.gameObject.tag != "Box") 
+		{
 			return;
-		} else if (other.gameObject.GetComponent<BoxController>().colorName == colorName) {
+		} 
+		else if (other.gameObject.GetComponent<BoxController>().colorName == colorName) 
+		{
 			activated = true;
-		} else if (mixedColor) {
-			if (colorsToMix.ContainsKey(other.gameObject.GetComponent<BoxController>().colorName)) {
+		} 
+		else if (mixedColor) 
+		{
+			if (colorsToMix.ContainsKey(other.gameObject.GetComponent<BoxController>().colorName)) 
+			{
 				colorsToMix[other.gameObject.GetComponent<BoxController>().colorName] = true;
 			}
+			
 			foreach (bool present in colorsToMix.Values)
 			{
 				if (!present) {
