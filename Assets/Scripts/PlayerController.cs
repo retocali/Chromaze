@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
 	// Player movement constants
 	public float speed;
 	public float jumpHeight;
-	public float minHeight = -100f;
+	public float minHeight = -50f;
 	
 	public float scaleFactor = 0.3f;
 	public int boxLayer = 1 << 9;
@@ -62,8 +62,9 @@ public class PlayerController : MonoBehaviour {
 
 		// Jumping
 		if (Input.GetKey(KeyCode.Space) && onGround) {
-			audioJump.PlayOneShot (jump, 0.7F);
-			rb.velocity = jumpHeight * - Physics.gravity.normalized;
+			audioJump.clip = jump;
+			audioJump.Play();
+			rb.velocity	 = jumpHeight * - Physics.gravity.normalized;
 
 		}
 
@@ -81,12 +82,13 @@ public class PlayerController : MonoBehaviour {
 		moveItem();
 
 		// Checking for Jumps
-		if (Physics.Raycast(transform.position, Physics.gravity.normalized, transform.lossyScale.y/2+0.001f)) {
+		if (Physics.Raycast(transform.position, Physics.gravity.normalized, transform.lossyScale.y)) {
 			onGround = true;
 		} else {
 			onGround = false;
 		}
 
+		// Respawn if the player falls out of bounds
 		if (transform.position.y <= minHeight) {
 			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			transform.position = initialPosition;
@@ -97,7 +99,7 @@ public class PlayerController : MonoBehaviour {
 		// Extra update to solve jitteriness
 	void LateUpdate()
 	{
-		mainCamera.transform.position = transform.position;	
+		mainCamera.transform.position = transform.position - Physics.gravity.normalized/2;	
 		if (holding) {
 			currentBubble.transform.position = item.GetComponent<Rigidbody>().transform.position;
 		}
@@ -110,6 +112,7 @@ public class PlayerController : MonoBehaviour {
 		if (Physics.BoxCast(transform.position, 2*(Vector3.one-Vector3.forward), 
 				mainCamera.transform.TransformVector(Vector3.forward), out hit, 
 				mainCamera.transform.rotation, 1, boxLayer)) {
+				
 				audioBubble.PlayOneShot(bubble, 0.9F);
 			
 			if (!(hit.collider.gameObject.tag == "Box")) {
@@ -133,11 +136,15 @@ public class PlayerController : MonoBehaviour {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
 			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
+			
 			item.transform.localScale /= scaleFactor;
+			
 			Destroy(currentBubble);
+			
 			audioBubble.PlayOneShot(bubble, 0.9F);
 
 			Physics.IgnoreCollision(item.GetComponent<Collider>(), GetComponent<Collider>(), false);
+			
 			item = null;
 			holding = false;
 			
@@ -149,14 +156,18 @@ public class PlayerController : MonoBehaviour {
 		if (holding) {
 			Vector3 heldPosition = transform.position + mainCamera.transform.TransformVector(transform.forward*1.5f);
 			Vector3 distance = heldPosition - item.GetComponent<Rigidbody>().position;
-			Debug.Log(distance.magnitude);
+
 			float minimum_distance = 0.1f;
 			float maximum_distance = 2f;
-			if (distance.magnitude > maximum_distance) {
+			
+			if (distance.magnitude > maximum_distance) 
+			{
 				drop();
-			} else if (distance.magnitude > minimum_distance) {
+			} else if (distance.magnitude > minimum_distance) 
+			{
 				item.GetComponent<Rigidbody>().velocity = (speed*speed/2 * distance);
-			} else {
+			} else 
+			{
 				item.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			}
 		}

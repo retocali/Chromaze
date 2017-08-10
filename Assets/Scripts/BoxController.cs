@@ -5,7 +5,7 @@ using Colors;
 
 public class BoxController : MonoBehaviour {
 
-	public float minHeight = -100f;
+	public float minHeight = -50f;
 	
 	public ColorManager.ColorName colorName;
 	public static Material baseMaterial;

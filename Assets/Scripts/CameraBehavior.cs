@@ -55,7 +55,6 @@ public class CameraBehavior : MonoBehaviour
 			rotationX = ClampAngle(rotationX, minimumX, maximumX);
 			rotationY = ClampAngle(rotationY, minimumY, maximumY);
 			
-			Debug.Log(rotationY);
 			rotArrayY.Add(rotationY);
 			rotArrayX.Add(rotationX);
 
@@ -174,10 +173,10 @@ public class CameraBehavior : MonoBehaviour
 		angle = angle % 360;
 		if ((angle >= -360F) && (angle <= 360F)) {
 			if (angle < -360F) {
-				angle = -360F;
+				angle += 360F;
 			}
 			if (angle > 360F) {
-				angle = 360F;
+				angle -= 360F;
 			}			
 		}
 		return Mathf.Clamp (angle, min, max);
