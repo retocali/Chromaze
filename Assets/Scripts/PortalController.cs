@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InterSceneData;
 
 public class PortalController : MonoBehaviour 
 {
@@ -11,6 +12,10 @@ public class PortalController : MonoBehaviour
 	public AudioClip portal;
 	public AudioSource audioPortal;
 
+	public bool connecting = false;
+	
+	public int destination;	
+
 	private GameObject player;
 	
 	private Camera cameraView;
@@ -18,7 +23,7 @@ public class PortalController : MonoBehaviour
 	private RenderTexture view;
 	
 	private bool turnedOn;
-	
+
 
 	void Awake() 
 	{
@@ -84,6 +89,10 @@ public class PortalController : MonoBehaviour
 			if (other.gameObject.tag != "Player") {
 				other.gameObject.GetComponent<Collider>().isTrigger = true;
 				return;
+			}
+
+			if (connecting) {
+				Data.currentLevel = destination;
 			}
 
 			var deltaY = other.transform.position.y - transform.position.y;

@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
 
 	
 	// Internal variables
+	public float pickUpDistance = 2;
 	private Rigidbody rb;
 	
 	private bool onGround;
@@ -110,8 +111,8 @@ public class PlayerController : MonoBehaviour {
 	void pickUp() {
 		
 		if (Physics.BoxCast(transform.position, 2*(Vector3.one-Vector3.forward), 
-				mainCamera.transform.TransformVector(Vector3.forward), out hit, 
-				mainCamera.transform.rotation, 1, boxLayer)) {
+				pickUpDistance * mainCamera.transform.TransformVector(Vector3.forward),
+				out hit, mainCamera.transform.rotation, 1, boxLayer)) {
 				
 				audioBubble.PlayOneShot(bubble, 0.9F);
 			
@@ -158,12 +159,13 @@ public class PlayerController : MonoBehaviour {
 			Vector3 distance = heldPosition - item.GetComponent<Rigidbody>().position;
 
 			float minimum_distance = 0.1f;
-			float maximum_distance = 2f;
+			float maximum_distance = 5f;
 			
 			if (distance.magnitude > maximum_distance) 
 			{
 				drop();
-			} else if (distance.magnitude > minimum_distance) 
+			} 
+			else if (distance.magnitude > minimum_distance) 
 			{
 				item.GetComponent<Rigidbody>().velocity = (speed*speed/2 * distance);
 			} else 
@@ -200,6 +202,10 @@ public class PlayerController : MonoBehaviour {
 	void makeBubble(){
 		currentBubble = Instantiate(bubblePrefab);
 	}
-
+	
+	public bool isHolding() {
+		return holding;
+	}
 }
+
 	

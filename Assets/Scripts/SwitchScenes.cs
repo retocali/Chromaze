@@ -13,7 +13,7 @@ public class SwitchScenes : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.anyKey) {
-			SceneManager.LoadScene ("Main Game");
+			SceneManager.LoadScene ("Menu");
 		}
 	}
 }
