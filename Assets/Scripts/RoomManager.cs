@@ -20,20 +20,19 @@ public class RoomManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (!Application.isEditor) {
-			// Do not take keyboard input in the actual build or if not setup
-			return;
-		}
-
-		// For each of the following keys go to the corresponding room
-		for (int i = 1; i < 10; i++)
-		{
-			if (Input.GetKeyDown(""+i)) {
-				goToRoom(i);
-				Data.currentLevel = i;
-				return;
+		//if (Application.isEditor) {
+			// For each of the following keys go to the corresponding room
+			for (int i = 1; i < 10; i++)
+			{
+				if (Input.GetKeyDown(""+i)) {
+					goToRoom(i);
+					Data.currentLevel = i;
+					return;
+				}
 			}
-		}
+		//}
+
+		
 		// Resets the game
 		if (Input.GetKeyDown(KeyCode.R)) {
 			resets();
@@ -47,7 +46,9 @@ public class RoomManager : MonoBehaviour {
 		}
 
 		// Toggles Fullscreen
-		Screen.fullScreen = !Screen.fullScreen;
+		if (Input.GetKeyDown(KeyCode.F)) {
+			Screen.fullScreen = !Screen.fullScreen;
+		}
 	}
 
 	// Moves the player to a given room

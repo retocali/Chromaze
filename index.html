@@ -1,21 +1,36 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-	<meta charset="UTF-8" />
-	<title>Maze Ball</title>
-	<link rel="stylesheet" type="text/css" href="mainGame.css">
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>| Chromaze |</title>
+    <link rel="stylesheet" href="build/TemplateData/style.css">
+    <link rel="shortcut icon" href="build/TemplateData/favicon.ico" />
+    <script src="build/TemplateData/UnityProgress.js"></script>
+  </head>
+  <body class="template">
+    <div class="template-wrap clear">
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="750px" width="1000px"></canvas>
+      <br>
+      <div class="logo"></div>
+      <div class="fullscreen"><img src="build/TemplateData/fullscreen.png" width="38" height="38" alt="Fullscreen" title="Fullscreen" onclick="SetFullscreen(1);" /></div>
+      <div class="title">Chromaze</div>
+    </div>
+    <script type='text/javascript'>
+  var Module = {
+    TOTAL_MEMORY: 536870912,
+    errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+    compatibilitycheck: null,
+    backgroundColor: "#111211",
+    splashStyle: "Dark",
+    dataUrl: "build/Release/build.data",
+    codeUrl: "build/Release/build.js",
+    asmUrl: "build/Release/build.asm.js",
+    memUrl: "build/Release/build.mem",
+  };
+</script>
+<script src="build/Release/UnityLoader.js"></script>
 
-    <style type="text/css">
-        body {
-            margin: 0;
-            background-color: #111212;
-        }
-    </style>
-</head>
-    <body>
-        <div id="wrapper">
-            <iframe id="scaled-frame" src="build/index.html" style="position:absolute; height:90%; width:70%; margin-left:15%; margin-top:2%; background-color:white">
-            </iframe>
-        </div>
-    </body>
+  </body>
 </html>
+
