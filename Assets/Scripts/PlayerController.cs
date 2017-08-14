@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using InterSceneData;
 
 public class PlayerController : MonoBehaviour {
 
@@ -47,6 +49,11 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (SceneManager.GetActiveScene().name != "Main Game") {
+			// Make the player inactive if the scene does not match
+			return;
+		}
+
 		// Moving
 		if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
 			moveRight(Time.deltaTime);
@@ -64,6 +71,7 @@ public class PlayerController : MonoBehaviour {
 		// Jumping
 		if (Input.GetKey(KeyCode.Space) && onGround) {
 			audioJump.clip = jump;
+			audioJump.volume = Data.sfx;
 			audioJump.Play();
 			rb.velocity	 = jumpHeight * - Physics.gravity.normalized;
 
@@ -114,7 +122,7 @@ public class PlayerController : MonoBehaviour {
 				pickUpDistance * mainCamera.transform.TransformVector(Vector3.forward),
 				out hit, mainCamera.transform.rotation, 1, boxLayer)) {
 				
-				audioBubble.PlayOneShot(bubble, 0.9F);
+			audioBubble.PlayOneShot(bubble, Data.sfx);
 			
 			if (!(hit.collider.gameObject.tag == "Box")) {
 				return;	

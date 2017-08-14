@@ -8,6 +8,7 @@ public class RoomManager : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject[] rooms;
+	public bool firstTime = true;
 	public Vector3[] roomInitialLocations;
 
 	private int playerPosition;
@@ -34,20 +35,19 @@ public class RoomManager : MonoBehaviour {
 
 		
 		// Resets the game
-		if (Input.GetKeyDown(KeyCode.R)) {
+		if (Input.GetKeyDown(KeyCode.L)) {
 			resets();
-			SceneManager.LoadScene ("Main Game");
-		}
-
-		// Goes to the main menu
-		if (Input.GetKeyDown(KeyCode.M)) {
-			resets();
-			SceneManager.LoadScene ("Menu");
+			SceneManager.LoadScene("Main Game");
 		}
 
 		// Toggles Fullscreen
 		if (Input.GetKeyDown(KeyCode.F)) {
 			Screen.fullScreen = !Screen.fullScreen;
+		}
+
+		// Goes to the main menu
+		if (Input.GetKeyDown(KeyCode.M) && SceneManager.sceneCount < 2) {
+			StartCoroutine(setScene("Menu"));
 		}
 	}
 
@@ -67,8 +67,11 @@ public class RoomManager : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 	void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-		Debug.Log("Going to Room 1");
+		if (!firstTime) {
+			return;
+		}
 		goToRoom(Data.currentLevel);
+		firstTime = false;
 	}
 	// called when the game is terminated
     void OnDisable()
@@ -79,5 +82,14 @@ public class RoomManager : MonoBehaviour {
 	
 	void resets() {
 		Physics.gravity = new Vector3(0, - Mathf.Abs(Physics.gravity.y), 0);	
+	}
+
+	IEnumerator setScene(string scene) {
+		AsyncOperation async = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+		while (!async.isDone) {
+			Debug.Log("Progress"+async.progress);
+			yield return new WaitForEndOfFrame();
+		}	
+		SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene));
 	}
 }

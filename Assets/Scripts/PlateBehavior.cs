@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Colors;
+using InterSceneData;
 
 public class PlateBehavior : MonoBehaviour {
 
@@ -62,7 +63,7 @@ public class PlateBehavior : MonoBehaviour {
 			this.GetComponent<Renderer>().material = activatedColor;
 			color = activatedColor.color;
 			
-			AudioSource.PlayClipAtPoint(panel, transform.position, 0.9F);
+			AudioSource.PlayClipAtPoint(panel, transform.position, 0.5F*Data.sfx);
 		}
 		else if (!activated && color != deactivatedColor.color) {
 			this.GetComponent<Renderer>().material = deactivatedColor;
@@ -117,8 +118,10 @@ public class PlateBehavior : MonoBehaviour {
 			return;
 		}
 		if (mixedColor && other.gameObject.tag != "Player") {
-			if (colorsToMix.ContainsKey(other.gameObject.GetComponent<BoxController>().colorName)) {
-				colorsToMix[other.gameObject.GetComponent<BoxController>().colorName] = false;
+			if (other.gameObject.GetComponent<BoxController>() != null) {
+				if (colorsToMix.ContainsKey(other.gameObject.GetComponent<BoxController>().colorName)) {
+					colorsToMix[other.gameObject.GetComponent<BoxController>().colorName] = false;
+				}
 			}
 		}
 		activated = false;

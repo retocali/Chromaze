@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using InterSceneData;
 
 [AddComponentMenu("Camera-Control/Smooth Mouse Look")]
 public class CameraBehavior : MonoBehaviour 
@@ -8,8 +9,8 @@ public class CameraBehavior : MonoBehaviour
 
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 	public RotationAxes axes = RotationAxes.MouseXAndY;
-	public float sensitivityX = 15F;
-	public float sensitivityY = 15F;
+	private float sensitivityX = Data.sensitivityX;
+	private float sensitivityY = Data.sensitivityY;
 
 	public float minimumX = -359F;
 	public float maximumX = 359F;
@@ -127,37 +128,7 @@ public class CameraBehavior : MonoBehaviour
 			Quaternion yQuaternion = Quaternion.AngleAxis (rotAverageY, Vector3.left);
 			transform.localRotation = originalRotation * yQuaternion;
 		}
-
-		// seems like a button press is toggled multiple times
-		// Sensitivity 
-		if (Input.GetKey (KeyCode.P)) {
-			if (sensitivityX < 25F) {
-				sensitivityX += 0.15F;
-				sensitivityY += 0.15F;
-			}
-			Debug.Log ("increasing Sensitivity");
-		}
-		if (Input.GetKey (KeyCode.O)) {
-			if (sensitivityX >=0.5F) {
-				sensitivityX -= 0.15F;
-				sensitivityY -= 0.15F;
-			}
-			Debug.Log ("decreasing Sensitivity");
-			Debug.Log (sensitivityX);
-		}
 			
-		if (Input.GetKey (KeyCode.M)) {
-			if (AudioListener.volume < 1.5F) {
-				AudioListener.volume += 0.1F;
-			}
-			Debug.Log ("YAY SOUND!");
-		} 
-		if (Input.GetKey (KeyCode.N)) {
-			if (AudioListener.volume >= 0F) {
-				AudioListener.volume -= 0.1F;
-			}
-			Debug.Log ("NAY SOUND");
-		}
 	}
 
 	void Start ()

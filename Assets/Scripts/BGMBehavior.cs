@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InterSceneData;
 
 public class BGMBehavior : MonoBehaviour {
 
@@ -11,16 +12,20 @@ public class BGMBehavior : MonoBehaviour {
 
 	private int timeConstant = 100;
 	private float delta = -1;
+	private float volume = Data.volume;
 	AudioSource audioSource;
 
 	void Start()
 	{
+		
 		audioSource = GetComponent<AudioSource>();
 		audioSource.pitch = startingPitch;
 	}
 
 	void FixedUpdate()
 	{
+		volume = Data.volume;
+		audioSource.volume = volume;
 		if (audioSource.pitch <= maxPitch && audioSource.pitch >= minPitch) {
 			audioSource.pitch += delta*Time.deltaTime / timeConstant * startingPitch / timeToDecrease;
 

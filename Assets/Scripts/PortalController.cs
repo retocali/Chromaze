@@ -104,7 +104,7 @@ public class PortalController : MonoBehaviour
 		
 			Vector3 position = new Vector3(x, y + deltaY, z + deltaZ);
 			other.gameObject.transform.position = position;
-			audioPortal.PlayOneShot(portal, 2.2F);
+			audioPortal.PlayOneShot(portal, Data.sfx);
 		
 			
 			other.gameObject.GetComponent<PlayerController>().teleportItem(position);		

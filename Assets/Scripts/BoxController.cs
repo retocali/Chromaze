@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Colors;
+using InterSceneData;
 
 public class BoxController : MonoBehaviour {
 
@@ -43,7 +44,7 @@ public class BoxController : MonoBehaviour {
 		if (transform.position.y <= minHeight) {
 			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			transform.position = initialPosition;
-			audioRespawn.PlayOneShot(respawn, 2.0F);
+			audioRespawn.PlayOneShot(respawn, Data.sfx);
 		}
 	}
 
