@@ -1,22 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using InterSceneData;
 
 public class RoomManager : MonoBehaviour {
 
 	public GameObject player;
-	public GameObject[] rooms;
-	public bool firstTime = true;
-	public Vector3[] roomInitialLocations;
+	public Text text;
+	public Image textBackground;
 
+	public GameObject[] rooms;
+	public Vector3[] roomInitialLocations;
+	public string[] roomQuotes;
+
+	private bool firstTime = true;	
 	private int playerPosition;
 
 	// Use this for initialization
 	void Start () {
 		Debug.Assert(rooms.Length == roomInitialLocations.Length, "Error: Room Manager was not set up properly");
-	
+		text.enabled = false;
+		textBackground.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -32,10 +38,12 @@ public class RoomManager : MonoBehaviour {
 				}
 			}
 		//}
-
+		if (Input.GetKeyDown(KeyCode.H)) {
+			giveHint();
+		}
 		
 		// Resets the game
-		if (Input.GetKeyDown(KeyCode.L)) {
+		if (Input.GetKeyDown(KeyCode.J)) {
 			resets();
 			SceneManager.LoadScene("Main Game");
 		}
@@ -46,7 +54,8 @@ public class RoomManager : MonoBehaviour {
 		}
 
 		// Goes to the main menu
-		if (Input.GetKeyDown(KeyCode.M) && SceneManager.sceneCount < 2) {
+		if ((Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) 
+				&& SceneManager.sceneCount < 2) {
 			StartCoroutine(setScene("Menu"));
 		}
 	}
@@ -55,6 +64,9 @@ public class RoomManager : MonoBehaviour {
 	public void goToRoom(int roomNumber) {
 		if (roomNumber-1 < roomInitialLocations.Length) {
 			player.transform.position = roomInitialLocations[roomNumber-1];
+			player.GetComponent<PlayerController>().updateInitialLocation(); 
+			giveHint(roomNumber-1);
+			
 		} else {
 			Debug.LogError("Error: Not a valid room number");
 		}
@@ -91,5 +103,25 @@ public class RoomManager : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}	
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(scene));
+	}
+
+	void giveHint(int roomNumber) {
+		transform.position = player.transform.position;
+		text.text = roomQuotes[roomNumber];
+		text.enabled = true;
+		textBackground.enabled = true;
+		StartCoroutine(disappear());
+	}
+	void giveHint() {
+		transform.position = player.transform.position;
+		text.text = roomQuotes[Data.currentLevel-1];
+		text.enabled = true;
+		textBackground.enabled = true;
+		StartCoroutine(disappear());
+	}
+	IEnumerator disappear() {
+		yield return new WaitForSeconds(5);
+		text.enabled = false;
+		textBackground.enabled = false;
 	}
 }

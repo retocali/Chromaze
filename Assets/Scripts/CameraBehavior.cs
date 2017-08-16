@@ -9,14 +9,16 @@ public class CameraBehavior : MonoBehaviour
 
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 	public RotationAxes axes = RotationAxes.MouseXAndY;
-	private float sensitivityX = Data.sensitivityX;
-	private float sensitivityY = Data.sensitivityY;
 
 	public float minimumX = -359F;
 	public float maximumX = 359F;
 
 	public float minimumY = -60F;
 	public float maximumY = 60F;
+
+	private float sensitivityX = Data.sensitivityX;
+	private float sensitivityY = Data.sensitivityY;
+
 
 	float rotationX = 0F;
 	float rotationY = 0F;

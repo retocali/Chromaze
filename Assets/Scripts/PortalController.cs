@@ -61,7 +61,7 @@ public class PortalController : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 		if (exit == null || transform.childCount == 0) 
 		{
 			return;
@@ -69,12 +69,31 @@ public class PortalController : MonoBehaviour
 		if ((player.transform.position - cameraView.transform.position).magnitude < RenderDistance) 
 		{
 			exitView.enabled = true;
-			exitView.transform.rotation = Quaternion.LookRotation(- cameraView.transform.position + player.transform.position);
-			exitView.transform.Rotate(transform.rotation.eulerAngles-exit.transform.rotation.eulerAngles);
+			rotateCamera();
+			
 		} else {
 			exitView.enabled = false;
 		}
 
+	}
+	 
+	private void rotateCamera()
+	{
+		
+		Vector3 pos = transform.InverseTransformPoint(Camera.main.transform.position);
+		float x = Cap(pos.x, 50);
+		float y = Cap(pos.y);
+		float z = Cap(pos.z);
+		exitView.transform.localPosition = new Vector3(x, y, z);
+
+	}
+	private float Cap(float a, float tolerance = 1f) {
+		if (a < -tolerance) {
+			a = -tolerance;
+		} else if (a > tolerance) {
+			a = tolerance;
+		}
+		return a;
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -93,6 +112,7 @@ public class PortalController : MonoBehaviour
 
 			if (connecting) {
 				Data.currentLevel = destination;
+				player.GetComponent<PlayerController>().updateInitialLocation(); 
 			}
 
 			var deltaY = other.transform.position.y - transform.position.y;

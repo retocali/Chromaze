@@ -14,9 +14,13 @@ public class PlateBehavior : MonoBehaviour {
 	private static Dictionary<ColorManager.ColorName, Material> deactivatedMaterials = new Dictionary<ColorManager.ColorName, Material>();
 	private static Dictionary<ColorManager.ColorName, Material> activatedMaterials = new Dictionary<ColorManager.ColorName, Material>();
 	
+	public Material materialInactive;
+	public Material materialActive;
+
+
 	private Material activatedColor;
 	private Material deactivatedColor;
-	private Color color;
+	private Material currentColor;
 
 
 	public ColorManager.ColorName colorName;
@@ -26,15 +30,17 @@ public class PlateBehavior : MonoBehaviour {
 	void Start () {
 		activated = false;
 		
-		color = ColorManager.findColor(colorName);
 		if (!activatedMaterials.ContainsKey(colorName)) {
+			Color color = ColorManager.findColor(colorName);
+
 			
-			deactivatedColor = new Material(this.GetComponent<Renderer>().material);
-			deactivatedColor.color = new Color(0.5f*color.r, 0.5f*color.g, 0.5f*color.b, 0f);
-			
-			activatedColor = new Material(this.GetComponent<Renderer>().material);
+			deactivatedColor = new Material(materialInactive);
+			activatedColor = new Material(materialActive);
+
+			deactivatedColor.color = color;
 			activatedColor.color = color;
 			
+
 			deactivatedMaterials[colorName] = deactivatedColor;
 			activatedMaterials[colorName] = activatedColor;
 			
@@ -45,29 +51,29 @@ public class PlateBehavior : MonoBehaviour {
 		this.GetComponent<Renderer>().material = deactivatedColor;
 		
 		
-		color = deactivatedColor.color;
+		currentColor = deactivatedColor;
 		mixedColor = ColorManager.isMixed(colorName);
 		
 		if (mixedColor) 
 		{
-			foreach (ColorManager.ColorName color in ColorManager.mixture(colorName))
+			foreach (ColorManager.ColorName colorName in ColorManager.mixture(colorName))
 			{
-				colorsToMix.Add(color, false);
+				colorsToMix.Add(colorName, false);
 			}
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {	
-		if (activated && color != activatedColor.color) {
+		if (activated && currentColor != activatedColor) {
 			this.GetComponent<Renderer>().material = activatedColor;
-			color = activatedColor.color;
+			 currentColor = activatedColor;
 			
 			AudioSource.PlayClipAtPoint(panel, transform.position, 0.5F*Data.sfx);
 		}
-		else if (!activated && color != deactivatedColor.color) {
+		else if (!activated &&  currentColor != deactivatedColor) {
 			this.GetComponent<Renderer>().material = deactivatedColor;
-			color = deactivatedColor.color;
+			 currentColor = deactivatedColor;
 		}
 	}
 

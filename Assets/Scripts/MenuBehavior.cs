@@ -3,23 +3,29 @@ using System.Collections;
 using UnityEngine.EventSystems;  
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using InterSceneData;
 
 public class MenuBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler {
 
 	public Text theText;
 
 	void Start(){
+		if (transform.name == "Start") {
+			if (Data.gameLoaded) {
+				GetComponentInChildren<Text>().text = "Resume";
+			}
+		}
 	}
 
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		theText.color = Color.red; 
+		theText.color = Color.cyan; 
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		theText.color = Color.white; 
+		theText.color = Color.black; 
 	}
 
 	public void OnPointerDown(PointerEventData eventData) {
@@ -31,7 +37,9 @@ public class MenuBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 		if (transform.name == "Start") {
 			if (SceneManager.sceneCount == 1) {
 				// Load the game for the first time
+				Data.gameLoaded = true;
 				SceneManager.LoadScene("Main Game");
+
 			} else {
 				// Go back to the previous game
 				SceneManager.UnloadSceneAsync("Menu");

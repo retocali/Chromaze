@@ -25,7 +25,7 @@ namespace Colors
 		public static Color GREEN = Color.green;
 		public static Color BLUE = Color.blue;
 		public static Color PURPLE = Color.magenta;
-		public static Color BLACK = Color.black;
+		public static Color BLACK = new Color(0.15f,0.15f,0.15f);
 		public static Color WHITE = Color.white;
 
 		public static Color findColor(ColorName colorName) {

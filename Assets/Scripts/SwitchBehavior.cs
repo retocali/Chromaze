@@ -28,7 +28,7 @@ public class SwitchBehavior : MonoBehaviour {
 		if (gameObject.GetComponent<Rigidbody>() != null) {
 			rb = gameObject.GetComponent<Rigidbody>();
 			if (present) {
-				rb.constraints = RigidbodyConstraints.FreezeRotation;
+				rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 		
 			} else {
 				rb.constraints = RigidbodyConstraints.FreezeAll;
@@ -66,7 +66,7 @@ public class SwitchBehavior : MonoBehaviour {
 		if (rb != null) {
 
 			if (rend.enabled) {
-				rb.constraints = RigidbodyConstraints.FreezeRotation;
+				rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 			
 			} else {
 				rb.constraints = RigidbodyConstraints.FreezeAll;

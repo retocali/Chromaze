@@ -24,10 +24,12 @@ public class PlayerController : MonoBehaviour {
 	
 	public AudioSource audioBubble;
 	public AudioSource audioJump;
+	
+	public GameObject roomManager;
 
 	
 	// Internal variables
-	public float pickUpDistance = 2;
+	public float pickUpDistance = 3;
 	private Rigidbody rb;
 	
 	private bool onGround;
@@ -42,6 +44,9 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		if (roomManager == null) {
+			roomManager = GameObject.Find("RoomManager");
+		}
 		onGround = false;
 		holding = false;
 		initialPosition = transform.position;
@@ -78,13 +83,10 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// Item holding
-		if (Input.GetKeyDown(KeyCode.E)) {
+		if (Input.GetKeyUp(KeyCode.E)) {
 			if (!holding) {
 				pickUp();
-			}
-		}
-		else if (Input.GetKeyDown(KeyCode.Q)) {
-			if (holding) {
+			} else {
 				drop();
 			}
 		}
@@ -118,7 +120,7 @@ public class PlayerController : MonoBehaviour {
 
 	void pickUp() {
 		
-		if (Physics.BoxCast(transform.position, 2*(Vector3.one-Vector3.forward), 
+		if (Physics.BoxCast(transform.position, 0.2F*(Vector3.one-Vector3.forward), 
 				pickUpDistance * mainCamera.transform.TransformVector(Vector3.forward),
 				out hit, mainCamera.transform.rotation, 1, boxLayer)) {
 				
@@ -126,11 +128,16 @@ public class PlayerController : MonoBehaviour {
 			
 			if (!(hit.collider.gameObject.tag == "Box")) {
 				return;	
-			}
+			} 
 
-			holding = true;
 			item = hit.collider.gameObject;
-
+			
+			if (!item.GetComponent<BoxController>().isPickable()) {
+				return;
+			}
+			Debug.Log("Picking Up");
+			item.GetComponent<BoxController>().pickUp();
+			holding = true;
 			item.GetComponent<Rigidbody>().useGravity = false;
 			item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 			
@@ -143,6 +150,7 @@ public class PlayerController : MonoBehaviour {
 	
 	void drop() {
 		if (holding && item.GetComponent<BoxController>().isDroppable()) {
+			Debug.Log("Dropping");
 			item.GetComponent<Collider>().isTrigger = false;
 			item.GetComponent<Rigidbody>().useGravity = true;
 			
@@ -150,6 +158,7 @@ public class PlayerController : MonoBehaviour {
 			
 			Destroy(currentBubble);
 			
+			item.GetComponent<BoxController>().drop();
 			audioBubble.PlayOneShot(bubble, 0.9F);
 
 			Physics.IgnoreCollision(item.GetComponent<Collider>(), GetComponent<Collider>(), false);
@@ -213,6 +222,9 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isHolding() {
 		return holding;
+	}
+	public void updateInitialLocation() {
+		initialPosition = roomManager.GetComponent<RoomManager>().roomInitialLocations[Data.currentLevel];
 	}
 }
 

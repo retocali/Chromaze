@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: c06f09e369faa4be3a8a7aa6c65d9186, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,7 +74,6 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33128668149181422
 MeshFilter:
@@ -121,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3020c0740366c4237b0dbfd3b3b8d369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialInactive: {fileID: 2100000, guid: c06f09e369faa4be3a8a7aa6c65d9186, type: 2}
+  materialActive: {fileID: 2100000, guid: 023252f1f49e24e8bb6aca5bbcab2a61, type: 2}
   colorName: 0
   panel: {fileID: 8300000, guid: 9740279df58514ae89e6353e3f1ecefa, type: 3}
-  audioPanel: {fileID: 0}
