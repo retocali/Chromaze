@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour {
 		return holding;
 	}
 	public void updateInitialLocation() {
-		initialPosition = roomManager.GetComponent<RoomManager>().roomInitialLocations[Data.currentLevel];
+		initialPosition = roomManager.GetComponent<RoomManager>().roomInitialLocations[Data.currentLevel-1];
 	}
 }
 

@@ -20,6 +20,8 @@ public class RoomManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Screen.fullScreen = true;
+		Cursor.lockState = CursorLockMode.Locked;
 		Debug.Assert(rooms.Length == roomInitialLocations.Length, "Error: Room Manager was not set up properly");
 		text.enabled = false;
 		textBackground.enabled = false;
@@ -29,7 +31,7 @@ public class RoomManager : MonoBehaviour {
 	void Update () {
 		//if (Application.isEditor) {
 			// For each of the following keys go to the corresponding room
-			for (int i = 1; i < 10; i++)
+			for (int i = 1; i < 9; i++)
 			{
 				if (Input.GetKeyDown(""+i)) {
 					goToRoom(i);
@@ -131,7 +133,7 @@ public class RoomManager : MonoBehaviour {
 		StartCoroutine(disappear());
 	}
 	IEnumerator disappear() {
-		yield return new WaitForSeconds(5);
+		yield return new WaitForSeconds(10);
 		text.enabled = false;
 		textBackground.enabled = false;
 	}

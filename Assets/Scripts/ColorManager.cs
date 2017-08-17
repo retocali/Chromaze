@@ -20,7 +20,7 @@ namespace Colors
 		};
 
 		public static Color RED = Color.red;
-		public static Color ORANGE = new Color(1,0.5f,0,1);
+		public static Color ORANGE = new Color(1,0.1f,0,1);
 		public static Color YELLOW = Color.yellow;
 		public static Color GREEN = Color.green;
 		public static Color BLUE = Color.blue;
@@ -83,7 +83,7 @@ namespace Colors
 				case ColorName.Purple:
 					return new ColorName[] {ColorName.Blue, ColorName.Red};
 				case ColorName.White:
-					return new ColorName[] {ColorName.Blue, ColorName.Yellow, ColorName.Red};
+					return new ColorName[] {ColorName.Blue, ColorName.Yellow, ColorName.Red, ColorName.Orange, ColorName.Purple, ColorName.Green	};
 				default:
 					return new ColorName[] {};
 			}
