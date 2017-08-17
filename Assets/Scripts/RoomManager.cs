@@ -48,17 +48,28 @@ public class RoomManager : MonoBehaviour {
 			SceneManager.LoadScene("Main Game");
 		}
 
-		// Toggles Fullscreen
-		if (Input.GetKeyDown(KeyCode.F)) {
-			Screen.fullScreen = !Screen.fullScreen;
-		}
-
 		// Goes to the main menu
 		if ((Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) 
 				&& SceneManager.sceneCount < 2) {
 			StartCoroutine(setScene("Menu"));
+			Cursor.lockState = CursorLockMode.None;
+		}
+
+		// Toggles Fullscreen
+		if (Input.GetKeyDown(KeyCode.F)) {
+			Screen.fullScreen = !Screen.fullScreen;
+			switchCursor();
 		}
 	}
+
+	private void switchCursor() {
+		if (Cursor.lockState == CursorLockMode.Locked) {
+			Cursor.lockState = CursorLockMode.None;
+		} else {
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+	}
+
 
 	// Moves the player to a given room
 	public void goToRoom(int roomNumber) {

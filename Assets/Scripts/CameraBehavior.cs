@@ -52,8 +52,8 @@ public class CameraBehavior : MonoBehaviour
 			rotAverageY = 0f;
 			rotAverageX = 0f;
 
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+			rotationY += Input.GetAxis("Mouse Y") * Data.sensitivityY;
+			rotationX += Input.GetAxis("Mouse X") * Data.sensitivityX;
 
 			rotationX = ClampAngle(rotationX, minimumX, maximumX);
 			rotationY = ClampAngle(rotationY, minimumY, maximumY);
@@ -92,7 +92,7 @@ public class CameraBehavior : MonoBehaviour
 		{			
 			rotAverageX = 0f;
 
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+			rotationX += Input.GetAxis("Mouse X") * Data.sensitivityX;
 
 			rotArrayX.Add(rotationX);
 
@@ -113,7 +113,7 @@ public class CameraBehavior : MonoBehaviour
 		{			
 			rotAverageY = 0f;
 
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			rotationY += Input.GetAxis("Mouse Y") * Data.sensitivityY;
 
 			rotArrayY.Add(rotationY);
 
@@ -130,7 +130,7 @@ public class CameraBehavior : MonoBehaviour
 			Quaternion yQuaternion = Quaternion.AngleAxis (rotAverageY, Vector3.left);
 			transform.localRotation = originalRotation * yQuaternion;
 		}
-			
+
 	}
 
 	void Start ()

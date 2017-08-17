@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// Item holding
-		if (Input.GetKeyUp(KeyCode.E)) {
+		if (Input.GetKeyDown(KeyCode.E)) {
 			if (!holding) {
 				pickUp();
 			} else {
@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour {
 			if (!item.GetComponent<BoxController>().isPickable()) {
 				return;
 			}
-			Debug.Log("Picking Up");
+
 			item.GetComponent<BoxController>().pickUp();
 			holding = true;
 			item.GetComponent<Rigidbody>().useGravity = false;

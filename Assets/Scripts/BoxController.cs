@@ -16,7 +16,7 @@ public class BoxController : MonoBehaviour {
 
 	private static Dictionary<ColorManager.ColorName, Material> materials = new Dictionary<ColorManager.ColorName, Material>();
 	
-	private bool droppable = true;
+	private bool droppable = false;
 	private bool pickable = true;	
 
 	private Vector3 initialPosition;
@@ -61,6 +61,7 @@ public class BoxController : MonoBehaviour {
 
 	public void pickUp() {
 		pickable = false;
+		StartCoroutine(pickuping());
 	}
 
 	public void drop() {
@@ -69,8 +70,14 @@ public class BoxController : MonoBehaviour {
 
 	IEnumerator dropping()
 	{
-		yield return new WaitForSeconds(0.25f);
+		yield return new WaitForSeconds(0.5f);
 		pickable = true;
+	}
+
+	IEnumerator pickuping()
+	{
+		yield return new WaitForSeconds(0.5f);
+		droppable = true;
 	}
 
 	void OnTriggerEnter(Collider other)

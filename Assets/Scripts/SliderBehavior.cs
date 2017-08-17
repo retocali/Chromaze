@@ -29,11 +29,11 @@ public class SliderBehavior : MonoBehaviour {
 	void Update () {
 		
 		if (transform.name == "Slider SensitivityX") {
-			Data.sensitivityX = 14.0F * GetComponent<Slider> ().value;
+			Data.sensitivityX = 10.0F * GetComponent<Slider> ().value;
 		}		
 
 		if (transform.name == "Slider SensitivityY") {
-			Data.sensitivityY = 14.0F * GetComponent<Slider> ().value;
+			Data.sensitivityY = 10.0F * GetComponent<Slider> ().value;
 		}
 
 		if (transform.name == "Slider Sound") {
