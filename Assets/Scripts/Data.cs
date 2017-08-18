@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace InterSceneData
 {
+	/**
+		Static Class to keep data between scenes and scripts
+	**/
 	public static class Data {
 
 		public static int currentLevel = 1;

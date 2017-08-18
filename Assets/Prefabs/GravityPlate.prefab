@@ -56,7 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: f48a2d9604e57456ba2c9b550080ed6a, type: 2}
+  - {fileID: 2100000, guid: c06f09e369faa4be3a8a7aa6c65d9186, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,6 +105,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorName: 7
-  affectedObjects:
-  - {fileID: 0}
-  - {fileID: 0}
